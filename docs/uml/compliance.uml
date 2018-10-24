@@ -1,0 +1,65 @@
+@startuml
+package Libs <<Rectangle>> {
+    class Ownable {
+        + owner
+        __ events __
+        {abstract} OwnerTransferred()
+        ----
+        +transferOwner()
+    }
+
+    class Lockable {
+        + isLocked
+        ----
+        setLocked()
+    }
+
+    class Destroyable {
+        + kill()
+    }
+
+    class LockableDestroyable {
+    }
+}
+Ownable <-- Destroyable
+Ownable <-- Lockable
+Destroyable <-- LockableDestroyable
+Lockable <-- LockableDestroyable
+
+
+package Compliance <<Rectangle>> {
+    interface ComplianceRule {
+        + canTransfer()
+    }
+
+    interface Compliance {
+        __ events __
+        {abstract} AddressFrozen()
+        ----
+        + setAddressFrozen()
+        + getRules()
+        + setRules()
+        + canTransfer()
+    }
+
+    class T0kenCompliance {
+        + MAX_RULES
+        + affiliateFreeze
+        + addressFreezes
+        + affiliates
+        - complianceRules
+        ----
+        + setStorage()
+        + setAffiliate()
+        + setAffiliateFreeze()
+        + setAddressFrozen()
+        + getRules()
+        + setRules()
+        + canTransfer()
+        # checkFrozen()
+    }
+}
+Ownable <-- T0kenCompliance
+LockableDestroyable <-- T0kenCompliance
+Compliance <-- T0kenCompliance
+@enduml
